@@ -3,10 +3,10 @@ using namespace std;
 
 struct Node {
     int val;
-    Node * next; 
+    Node* next; 
     Node() : val(0), next(nullptr) {cout << "default initialization" << endl;} //default constructor, used when creating new nodes
     Node(int x) : val(x), next(nullptr) {} 
-    Node(int x, Node* next) : val(x), next(next) {} //next(next_arg)
+    // Node(int x, Node* next) : val(x), next(next) {} //next(next_arg)
 };
 
 class ListNodes{
@@ -18,8 +18,11 @@ public:
 
     ~ListNodes(){
         Node* temp = head; // starting at head
-        while (temp->next != NULL){
-            delete temp;
+        delete temp;
+        while (true){
+            if (temp->next == NULL){
+                break;
+            }
             temp = temp->next;
         }
     }
@@ -29,7 +32,7 @@ public:
             head = new_node; // head now points to the FIRST new_node
             return; // exit the function after creating the first node
         } 
-        Node* temp = head; //start at head
+        Node* temp = head; //starts at head, temp and head now point to the same address
         while (temp->next != NULL){
             // for the first loop (from the 2nd node), temp->next = NULL, this loop is skipped
             temp = temp->next; //dereferencing the pointer stored in next
@@ -37,14 +40,24 @@ public:
         temp->next = new_node; // update indirectly through pointer
     }
 
-    // void printList(){
-    //     node_ptr = head;
-    // }
+    void printList(){
+        Node* temp = head; //start at head
+        while (true){
+            cout << temp->val << endl;
+            if (temp->next == NULL){
+                break;
+            }
+            temp = temp->next;
+        }
+    }
     // ListNode* swapPairs(ListNode* head) {     
     // }
 };
 
 int main(){
     ListNodes list;   
+    list.insertNode(1);
+    list.insertNode(2);
     list.insertNode(3);
+    list.printList();
 }
