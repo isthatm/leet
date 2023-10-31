@@ -68,10 +68,22 @@ class ListNodes{
 
            return;
         }
+    // private:
+        Node* swap_head_tail(Node* current_node){// current_node is either head or (tail -2)
+            cout << "head is: " << head << ", " << "current node is: " << current_node << endl; 
+            cout << "before next next: " << current_node->next->next << endl;
+            Node* temp = current_node->next;
+            current_node->next = temp->next;
+            temp->next = current_node;
+            cout << "after next: " << current_node->next << ", head is: " << head->val << endl;
+
+            return current_node->next; // address of the current 
+        }
 };
 
 int main(){
     ListNodes list;   
+    Node* main_node;
     list.insertNode(1);
     list.insertNode(2);
     list.insertNode(3);
@@ -79,6 +91,8 @@ int main(){
     list.insertNode(5);
     list.insertNode(6);
     // list.swapPairs();
+    main_node = list.swap_head_tail(list.head);
+    // cout << "res: " << main_node->next << endl;
     list.printList();
 }
 
