@@ -67,21 +67,18 @@ class ListNodes{
            if (current_node->next == NULL){
             return current_node;
            }
-           current_node = swapHeadTail(this->head);
+           current_node = swapConsecutive(this->head);
 
-           do{
-            temp =  current_node->next;
-            current_node->next = temp->next;
-            temp->next = temp->next->next;
-            
+           {
+                temp = current_node->next;
+                current_node->next = temp->next;
+                current_node = swapConsecutive(current_node);
+           } while(current_node->next != NULL && current_node != NULL);
 
-           }while(current_node->next != NULL && 
-                  current_node != NULL);
-
-           return;
+           return this->head;
         }
     private:
-        Node* swapHeadTail(Node* current_node){// current_node is either head or (tail -2)
+        Node* swapConsecutive(Node* current_node){// current_node is either head or (tail -2)
         // 1 and 2 is swapped but two is not printed because head is still pointing to Node 1
         // NOTE: call this when '1 2 3 N or '1 2 N
             // cout << "head is: " << head << ", " << "current node is: " << current_node << endl; 
@@ -103,11 +100,11 @@ int main(){
     Node* main_node;
     list.insertNode(1);
     list.insertNode(2);
-    list.insertNode(3);
-    list.insertNode(4);
-    list.insertNode(5);
-    list.insertNode(6);
-    // list.swapPairs();
+    // list.insertNode(3);
+    // list.insertNode(4);
+    // list.insertNode(5);
+    // list.insertNode(6);
+    list.swapPairs(list.head);
     // main_node = list.swapHeadTail(list.head);
     // cout << "res: " << main_node->next << endl;
     list.printList();
