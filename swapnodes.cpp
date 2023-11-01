@@ -69,7 +69,7 @@ class ListNodes{
            }
            current_node = swapConsecutive(this->head);
 
-           {
+           do{
                 temp = current_node->next;
                 current_node->next = temp->next;
                 current_node = swapConsecutive(current_node);
@@ -92,6 +92,7 @@ class ListNodes{
             // cout << "after next: " << current_node->next << ", head is: " << head << endl;
 
             return current_node->next; // address of the Node next to current node after they're swapped 
+            // Ex: 1 2 3 N current_node->next = Node3
         }
 };
 
@@ -100,10 +101,10 @@ int main(){
     Node* main_node;
     list.insertNode(1);
     list.insertNode(2);
-    // list.insertNode(3);
-    // list.insertNode(4);
-    // list.insertNode(5);
-    // list.insertNode(6);
+    list.insertNode(3);
+    list.insertNode(4);
+    list.insertNode(5);
+    list.insertNode(6);
     list.swapPairs(list.head);
     // main_node = list.swapHeadTail(list.head);
     // cout << "res: " << main_node->next << endl;
