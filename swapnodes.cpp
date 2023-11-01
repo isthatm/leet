@@ -72,6 +72,7 @@ class ListNodes{
            do{
                 temp = current_node->next;
                 current_node->next = temp->next;
+                cout << "hereee: " < temp->next->val;
                 current_node = swapConsecutive(current_node);
            } while(current_node->next != NULL && current_node != NULL);
 
