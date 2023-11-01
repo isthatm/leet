@@ -52,32 +52,49 @@ class ListNodes{
             }
         }
 
-        void swapPairs() {
+        Node* swapPairs(Node* head) {
             /*
             Change the value of `next` for each node
+            Args:
+            - takes in a Node object pointer, if the addressed it points to 
+              , input node would be made as a new head
             Returns:
             - New head;
-            */   
+            */
+           this->head = head; 
            Node* current_node = head;
-           Node* temp;
+           Node* temp = NULL;
+           if (current_node->next == NULL){
+            return current_node;
+           }
+           current_node = swapHeadTail(this->head);
+
            do{
-            temp = current_node->next->next;
-            current_node->next = current_node;
-            current_node = temp->next;
-           }while(temp->next != NULL);
+            temp =  current_node->next;
+            current_node->next = temp->next;
+            temp->next = temp->next->next;
+            
+
+           }while(current_node->next != NULL && 
+                  current_node != NULL);
 
            return;
         }
-    // private:
-        Node* swap_head_tail(Node* current_node){// current_node is either head or (tail -2)
-            cout << "head is: " << head << ", " << "current node is: " << current_node << endl; 
-            cout << "before next next: " << current_node->next->next << endl;
+    private:
+        Node* swapHeadTail(Node* current_node){// current_node is either head or (tail -2)
+        // 1 and 2 is swapped but two is not printed because head is still pointing to Node 1
+        // NOTE: call this when '1 2 3 N or '1 2 N
+            // cout << "head is: " << head << ", " << "current node is: " << current_node << endl; 
+            // cout << "before next next: " << current_node->next->next << endl;
+            if (current_node == head){
+                head = current_node->next;
+            }
             Node* temp = current_node->next;
             current_node->next = temp->next;
             temp->next = current_node;
-            cout << "after next: " << current_node->next << ", head is: " << head->val << endl;
+            // cout << "after next: " << current_node->next << ", head is: " << head << endl;
 
-            return current_node->next; // address of the current 
+            return current_node->next; // address of the Node next to current node after they're swapped 
         }
 };
 
@@ -91,7 +108,7 @@ int main(){
     list.insertNode(5);
     list.insertNode(6);
     // list.swapPairs();
-    main_node = list.swap_head_tail(list.head);
+    // main_node = list.swapHeadTail(list.head);
     // cout << "res: " << main_node->next << endl;
     list.printList();
 }
