@@ -35,15 +35,15 @@ class ListNodes{
                 head = new_node; // head now points to the FIRST new_node
                 return; // exit the function after creating the first node
             } 
-            Node* temp = head; //starts at head, temp and head now point to the same address
+            Node* temp = head;
             while (temp->next != NULL){
-                temp = temp->next; //dereferencing the pointer stored in next
+                temp = temp->next; 
             } 
             temp->next = new_node; // update indirectly through pointer
         }
 
         void printList(){
-            Node* temp = head; //start at head
+            Node* temp = head; 
             while (true){
                 cout << temp->val << endl;
                 if (temp->next == NULL){
@@ -54,14 +54,6 @@ class ListNodes{
         }
 
         Node* swapPairs(Node* head) {
-            /*
-            Change the value of `next` for each node
-            Args:
-            - takes in a Node object pointer, if the addressed it points to 
-              , input node would be made as a new head
-            Returns:
-            - New head;
-            */
            this->head = head; 
            Node* current_node = head;
            Node* temp = NULL;
@@ -88,16 +80,14 @@ class ListNodes{
         }
 
     private:
-        Node* swapConsecutive(Node* current_node){// current_node is either head or (tail -2)
-        // 1 and 2 is swapped but two is not printed because head is still pointing to Node 1
-        // NOTE: call this when '1 2 3 N or '1 2 N
+        Node* swapConsecutive(Node* current_node){
             if (current_node == head){
                 head = current_node->next;
             }
             Node* temp = current_node->next;
             current_node->next = temp->next;
             temp->next = current_node;
-            return current_node; // address of the Node next to current node after they're swapped 
+            return current_node; 
         }
 };
 
