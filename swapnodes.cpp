@@ -17,13 +17,15 @@ class ListNodes{
         }
 
         ~ListNodes(){
-            Node* temp = head; // starting at head
-            delete temp;
+            Node* current = head; // starting at head
+            Node* temp = current->next;
+            delete current;
             while (true){
-                if (temp->next == NULL){
+                current = temp;
+                if (current->next == NULL){
                     break;
                 }
-                temp = temp->next;
+                temp = current->next;
             }
         }
         
@@ -65,15 +67,16 @@ class ListNodes{
            Node* current_node = head;
            Node* temp = NULL;
            if (current_node->next == NULL){
-            return current_node;
+                return current_node;
            }
            current_node = swapConsecutive(this->head);
-
            do{
                 temp = current_node->next;
                 current_node->next = temp->next;
+                current_node = temp;
                 current_node = swapConsecutive(current_node);
-           } while(current_node->next != NULL && current_node != NULL);
+                // cout << current_node->val << endl;
+           }while(current_node->next != NULL);
 
            return this->head;
         }
@@ -91,8 +94,7 @@ class ListNodes{
             temp->next = current_node;
             // cout << "after next: " << current_node->next << ", head is: " << head << endl;
 
-            return current_node->next; // address of the Node next to current node after they're swapped 
-            // Ex: 1 2 3 N current_node->next = Node3
+            return current_node; // address of the Node next to current node after they're swapped 
         }
 };
 
@@ -103,11 +105,10 @@ int main(){
     list.insertNode(2);
     list.insertNode(3);
     list.insertNode(4);
-    list.insertNode(5);
-    list.insertNode(6);
+    // list.insertNode(5);
+    // list.insertNode(6);
     list.swapPairs(list.head);
     // main_node = list.swapHeadTail(list.head);
     // cout << "res: " << main_node->next << endl;
     // list.printList();
 }
-
