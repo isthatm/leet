@@ -60,7 +60,8 @@ class ListNodes{
            if (current_node->next == NULL){
                 return current_node;
            }
-           current_node = swapConsecutive(this->head);
+           this->head = current_node->next;
+           current_node = swapConsecutive(current_node);
            if(current_node->next != NULL) {
                 if(current_node->next->next != NULL){
                     while(true){
@@ -81,9 +82,6 @@ class ListNodes{
 
     private:
         Node* swapConsecutive(Node* current_node){
-            if (current_node == head){
-                head = current_node->next;
-            }
             Node* temp = current_node->next;
             current_node->next = temp->next;
             temp->next = current_node;
@@ -94,14 +92,14 @@ class ListNodes{
 int main(){
     ListNodes list;   
     Node* input_node;
-    // list.insertNode(1);
-    // list.insertNode(2);
-    // list.insertNode(3);
-    // list.insertNode(4);
-    // list.insertNode(5);
-    // list.insertNode(6);
-    // list.insertNode(7);
-    // input_node = new Node();
-    list.swapPairs(input_node);
+    list.insertNode(1);
+    list.insertNode(2);
+    list.insertNode(4);
+    list.insertNode(5);
+    list.insertNode(6);
+    list.insertNode(7);
+    input_node = list.head;
+    Node* new_head = list.swapPairs(input_node->next);
     list.printList();
+    cout << "current head: " << new_head->val << endl;
 }
