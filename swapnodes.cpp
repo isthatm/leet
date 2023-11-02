@@ -26,6 +26,7 @@ class ListNodes{
                     break;
                 }
                 temp = current->next;
+                delete current;
             }
         }
         
