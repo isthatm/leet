@@ -72,7 +72,6 @@ class ListNodes{
            do{
                 temp = current_node->next;
                 current_node->next = temp->next;
-                cout << "hereee: " < temp->next->val;
                 current_node = swapConsecutive(current_node);
            } while(current_node->next != NULL && current_node != NULL);
 
@@ -109,6 +108,6 @@ int main(){
     list.swapPairs(list.head);
     // main_node = list.swapHeadTail(list.head);
     // cout << "res: " << main_node->next << endl;
-    list.printList();
+    // list.printList();
 }
 
