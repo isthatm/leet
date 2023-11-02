@@ -69,9 +69,8 @@ class ListNodes{
                         temp = current_node->next;
                         current_node->next = temp->next;
                         current_node = swapConsecutive(temp);
-                        if(
-                            current_node->next == NULL ||
-                            current_node->next->next == NULL
+                        if(current_node->next == NULL ||
+                           current_node->next->next == NULL
                             ){
                             break;
                         }
@@ -93,14 +92,14 @@ class ListNodes{
 int main(){
     ListNodes list;   
     Node* input_node;
-    list.insertNode(1);
-    list.insertNode(2);
-    list.insertNode(4);
-    list.insertNode(5);
-    list.insertNode(6);
-    list.insertNode(7);
+    int num;
+    cout << "Please enter the link length: " << endl;
+    cin >> num;
+    cout << "Swapping..." << endl;
+    for (int i = 0; i < num; i++){
+        list.insertNode(i);
+    }
     input_node = list.head;
     Node* new_head = list.swapPairs(input_node->next);
     list.printList();
-    cout << "current head: " << new_head->val << endl;
 }
