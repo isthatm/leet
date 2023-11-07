@@ -8,9 +8,9 @@ public:
 		int t_ptr = t.length() - 1;
 
 		while (s_ptr >= 0 && t_ptr >= 0){
-			
 			s_ptr = backspace(s, s_ptr);
 			t_ptr = backspace(t, t_ptr);
+			cout << "===============" << endl;
 			// s[s_ptr] and t[t_ptr] can only fall into either 1 of these twos:
 			// - negative value
 			// - a valid char
@@ -24,12 +24,11 @@ public:
 					return false;
 				}
 			}
-
 			s_ptr--;
 			t_ptr--;
 		}
-		return true;
     }
+
 private:
 	int backspace(string str, int ptr){
 		int backspace = 0;
@@ -38,11 +37,8 @@ private:
 			if(str[ptr] == '#'){
 				backspace++;
 			} else if (backspace > 0){
-			// not # and backspace > 0 -> char to be deleted
-			// backspace is also deleted
 				backspace--;
 			} else{
-				//exit the loop at the valid char
 				break;
 			}
 			ptr--;		
@@ -53,9 +49,9 @@ private:
 };
 
 int main(){
-	string s = "bxj##tw";
-	string t = "bxj###tw";
+	string s = "nzp#o#g";
+	string t = "b#nzp#o#g";
 	Solution sol;
 	bool res = sol.backspaceCompare(s, t);
-	cout << res << endl;
+	cout << "Result: " << res << endl;
 }
