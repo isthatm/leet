@@ -14,6 +14,11 @@ public:
 			// s[s_ptr] and t[t_ptr] can only fall into either 1 of these twos:
 			// - negative value
 			// - a valid char
+			if (s_ptr < 0 && t_ptr < 0){
+				return true;
+			} else if (s_ptr < 0 || t_ptr < 0){
+				return false;
+			}
 			if (s_ptr >= 0 && t_ptr >= 0){
 				if (s[s_ptr] != t[t_ptr]){
 					return false;
@@ -23,13 +28,7 @@ public:
 			s_ptr--;
 			t_ptr--;
 		}
-		
-		if (s_ptr < 0 && t_ptr < 0){
-			cout << "trueeee" << endl;
-			return true;
-		} else{
-			return false;
-		}
+		return true;
     }
 private:
 	int backspace(string str, int ptr){
