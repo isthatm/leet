@@ -7,7 +7,7 @@ public:
 		int s_ptr = s.length() - 1;
 		int t_ptr = t.length() - 1;
 
-		while (s_ptr >= 0 && t_ptr >= 0){
+		while (s_ptr >= 0 || t_ptr >= 0){
 			s_ptr = backspace(s, s_ptr);
 			t_ptr = backspace(t, t_ptr);
 			cout << "===============" << endl;
@@ -17,6 +17,7 @@ public:
 			if (s_ptr < 0 && t_ptr < 0){
 				return true;
 			} else if (s_ptr < 0 || t_ptr < 0){
+				cout << "FALSE" << endl;
 				return false;
 			}
 			if (s_ptr >= 0 && t_ptr >= 0){
@@ -27,6 +28,10 @@ public:
 			s_ptr--;
 			t_ptr--;
 		}
+		// cout << "end" << endl;
+		// cout << s_ptr << t_ptr << endl;
+		return true;
+
     }
 
 private:
