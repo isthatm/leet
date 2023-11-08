@@ -10,7 +10,6 @@ public:
 		while (s_ptr >= 0 || t_ptr >= 0){
 			s_ptr = backspace(s, s_ptr);
 			t_ptr = backspace(t, t_ptr);
-			cout << "===============" << endl;
 			// s[s_ptr] and t[t_ptr] can only fall into either 1 of these twos:
 			// - negative value
 			// - a valid char
@@ -28,10 +27,7 @@ public:
 			s_ptr--;
 			t_ptr--;
 		}
-		// cout << "end" << endl;
-		// cout << s_ptr << t_ptr << endl;
 		return true;
-
     }
 
 private:
@@ -48,7 +44,6 @@ private:
 			}
 			ptr--;		
 		}
-		cout << str << "," << ptr << endl;
 		return ptr; 
 	}
 };
