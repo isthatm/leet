@@ -8,14 +8,14 @@ public:
         if (
             (sx == fx) && (sy == fy)
         ){
-            if (t % 2 == 0){
+            if (
+                (t >= 2) || (!t)
+            ){
                 return true;
             } else{
                 return false;
             }
-        }
-        cout << "min_dist = " << chebyshev_dis << endl; 
-        if (t >= chebyshev_dis){
+        } else if (t >= chebyshev_dis){
             return true;
         } else{
             return false;
