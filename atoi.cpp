@@ -3,6 +3,8 @@
 
 using namespace std;
 
-const char* a = "123 hello there";
+const char* a = "12.6523";
 int b = atoi(a);
-cout << b << endl;
+int main(){
+    cout << b << endl;
+}
