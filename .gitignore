@@ -1,3 +1,7 @@
 *.exe
 vscode/
 .vs/
+*.html
+*.xml
+.results/
+

@@ -1,4 +1,4 @@
-int TABLE_SIZE = 10;
+int TABLE_SIZE;
 template <typename K>
 struct KeyHash {
     unsigned long operator()(const K& key) const

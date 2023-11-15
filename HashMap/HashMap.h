@@ -16,7 +16,8 @@ template <typename K, typename V, typename F = KeyHash<K>>
 class HashMap {
 public:
     HashMap() {
-        // construct zero initialized hash table of size
+        // construct zero initialized hash table of size defined in KeyHash.h
+        // table is an array of double pointers
         table = new HashNode<K, V> *[TABLE_SIZE]();
     }
 
@@ -55,6 +56,9 @@ public:
         HashNode<K, V> *entry = table[hashValue];
 
         while (entry != NULL && entry->getKey() != key) {
+           // iterate through keys having the same hash value
+           cout << entry->getNext() << endl;
+        //    cout << entry->getValue() << endl;
             prev = entry;
             entry = entry->getNext();
         }
