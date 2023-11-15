@@ -36,12 +36,14 @@ public:
 
     void put(K key, V value){
         int hash_value = hash_func(key);
-        MinhNode<K,V>* current_node = hash_table[hash_value];
         cout << hash_value << endl;
-        if (!current_node){// there is no key in this bucket
-            current_node = new MinhNode<K, V> (key, value);
-            cout << "KEY" << endl;
+        cout << hash_table[hash_value]<< endl;
+        cout << "========" << endl;
+        if (!hash_table[hash_value]){// there is no key in this bucket
+            hash_table[hash_value] = new MinhNode<K, V> (key, value);
+            // cout << hash_table[hash_value] << "," << current_node << endl;
         } else{// put it at the end of the list of nodes in this bucket
+            MinhNode<K,V>* current_node = hash_table[hash_value];
             while (!current_node){// traverese to the end
                 cout << "KEY(s)" << endl;
                 current_node = current_node->getNext();
