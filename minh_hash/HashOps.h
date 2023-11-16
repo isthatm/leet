@@ -9,6 +9,11 @@ using namespace std;
         + Keys of values 1, 11, 21, etc. would collide in a table size of 10 
         + This would not occur of a table size of 100 as each key will be stored
           in a separate bucket
+    NOTES:
+    - Should not use double pointer MinhNode<K, V>** current_node as updating 
+      through *current_node = (*current_node)->getNext();
+      actually updates the starting node of the bucket since the *ptr in dynamic array
+      always points to the first element
 */
 
 class hash_F{
@@ -29,6 +34,7 @@ public:
     ~HashOps(){
         MinhNode<K,V>* current_node = NULL;
         MinhNode<K,V>* prev_node = NULL;
+
         // delete all lists of nodes within a bucket
         // then delete the buckets
         for (int i = 0; i < TABLE_SIZE; i++){
@@ -46,6 +52,7 @@ public:
         // allocate the values to buckets on the heap
         int hash_value = hash_func(key);
         MinhNode<K,V>* current_node = hash_table[hash_value];
+
         if (!hash_table[hash_value]){// No key in this bucket
             hash_table[hash_value] = new MinhNode<K, V> (key, value);
         } else{// put it at the end of the list in this bucket
@@ -55,14 +62,16 @@ public:
                 }
                 current_node = current_node->getNext();
             }
-            current_node->setNext(key, value);
+            current_node->setNew(key, value);
         }
     }
 
     bool get(K key, V &value){
         int hash_value = hash_func(key);
         MinhNode<K,V>* current_node = hash_table[hash_value];
+        
         if (!current_node){
+            value = "Not found";
             return false;
         } else{
             while(current_node != NULL){
@@ -72,11 +81,38 @@ public:
                 }
                 current_node = current_node->getNext();
             }
+            value = "Not found";
             return false;
         }
     }
 
-    void remove(){
+    void remove(K key){
+        int hash_value = hash_func(key);
+        MinhNode<K,V>* current_node = hash_table[hash_value];
+        MinhNode<K,V>* prev_node = NULL;
+
+        if (!current_node){
+            cout << "Value is not available for removal" << endl;
+            return;
+        } else{
+            while(current_node != NULL){
+                if (key == current_node->getKey()){
+                    if (!prev_node){
+                        hash_table[hash_value] = current_node->getNext();
+                        return;
+                    }
+
+                    prev_node->setNext(current_node->getNext());
+                    delete current_node;
+                    delete prev_node;
+                    return;
+                }
+                prev_node = current_node;
+                current_node = current_node->getNext();
+            }
+            cout << "Value is not available for removal" << endl;
+        }
+        delete prev_node;
     }
 
 private:
