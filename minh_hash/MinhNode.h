@@ -15,10 +15,9 @@ public:
         return key;
     }
 
-    void setNext(K key, V value){
+    void setNext( K key, V value){
         next = new MinhNode(key, value); 
     }
-
 
 private:
     K key;
