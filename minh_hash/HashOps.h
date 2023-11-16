@@ -3,6 +3,14 @@
 #include "HashFun.h"
 using namespace std;
 
+/*
+    There is a trade off between table size and map collision
+    E.g. Provided that keys are integers and key ranges from 1 -> 100:
+        + Keys of values 1, 11, 21, etc. would collide in a table size of 10 
+        + This would not occur of a table size of 100 as each key will be stored
+          in a separate bucket
+*/
+
 class hash_F{
 public:
     int operator()(const int &key) const{ // reference to a constant
@@ -35,23 +43,37 @@ public:
     }
 
     void put(K key, V value){
+        // allocate the values to buckets on the heap
         int hash_value = hash_func(key);
-        MinhNode<K,V>** current_node = &hash_table[hash_value];
-        
-        if (!(*current_node)){// there is no key in this bucket
-            *current_node = new MinhNode<K, V> (key, value);
-        } else{// put it at the end of the list of nodes in this bucket
-            while (true){// traverese to the end
-                if (!(*current_node)->getNext()){
+        MinhNode<K,V>* current_node = hash_table[hash_value];
+        if (!hash_table[hash_value]){// No key in this bucket
+            hash_table[hash_value] = new MinhNode<K, V> (key, value);
+        } else{// put it at the end of the list in this bucket
+            while (true){
+                if (!(current_node->getNext())){
                     break;
                 }
-                *current_node = (*current_node)->getNext();
+                current_node = current_node->getNext();
             }
-            (*current_node)->setNext(key, value);
+            current_node->setNext(key, value);
         }
     }
 
-    void get(){
+    bool get(K key, V &value){
+        int hash_value = hash_func(key);
+        MinhNode<K,V>* current_node = hash_table[hash_value];
+        if (!current_node){
+            return false;
+        } else{
+            while(current_node != NULL){
+                if (key == current_node->getKey()){
+                    value = current_node->getValue();
+                    return true;
+                }
+                current_node = current_node->getNext();
+            }
+            return false;
+        }
     }
 
     void remove(){
