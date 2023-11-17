@@ -3,7 +3,7 @@
 using namespace std;
 
 int main(){
-    HashOps<int, string, hash_F> hash_map;
+    HashOps<int, string, int_hash> hash_map;
     string value;
     bool res;
     hash_map.put(1, "one");

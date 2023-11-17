@@ -16,7 +16,7 @@ using namespace std;
       always points to the first element
 */
 
-class hash_F{
+class int_hash{
 public:
     int operator()(const int &key) const{ // reference to a constant
     // Changing the value of this reference is invalid
@@ -24,7 +24,20 @@ public:
     }
 };
 
-template <typename K, typename V, typename F = HashFun<K>>
+class char_hash{
+public:
+    unsigned long operator()(const char* str){
+        unsigned long i = 0;
+
+        for (int j = 0; str[j]; j++){
+            i += str[j];
+        }
+
+        return i % TABLE_SIZE;
+    }
+};
+
+template <typename K, typename V, typename F>
 class HashOps{
 public:
     HashOps(){
@@ -50,13 +63,14 @@ public:
 
     void put(K key, V value){
         // allocate the values to buckets on the heap
-        int hash_value = hash_func(key);
+        auto hash_value = hash_func(key);
         MinhNode<K,V>* current_node = hash_table[hash_value];
 
         if (!hash_table[hash_value]){// No key in this bucket
             hash_table[hash_value] = new MinhNode<K, V> (key, value);
         } else{// put it at the end of the list in this bucket
             while (true){
+                // cout << current_node->getValue() << endl;
                 if (!(current_node->getNext())){
                     break;
                 }
@@ -67,11 +81,10 @@ public:
     }
 
     bool get(K key, V &value){
-        int hash_value = hash_func(key);
+        auto hash_value = hash_func(key);
         MinhNode<K,V>* current_node = hash_table[hash_value];
-        
         if (!current_node){
-            value = "Not found";
+            // value = "Not found";
             return false;
         } else{
             while(current_node != NULL){
@@ -81,13 +94,13 @@ public:
                 }
                 current_node = current_node->getNext();
             }
-            value = "Not found";
+            // value = "Not found";
             return false;
         }
     }
 
     void remove(K key){
-        int hash_value = hash_func(key);
+        auto hash_value = hash_func(key);
         MinhNode<K,V>* current_node = hash_table[hash_value];
         MinhNode<K,V>* prev_node = NULL;
 
@@ -109,9 +122,9 @@ public:
                 }
                 prev_node = current_node;
                 current_node = current_node->getNext();
-            }
-            cout << "Value is not available for removal" << endl;
+            }  
         }
+        cout << "Value is not available for removal" << endl;
         delete prev_node;
     }
 
