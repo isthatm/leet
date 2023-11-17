@@ -14,33 +14,41 @@ public:
     int myAtoi(string s) {
         int res = 0; //default is 0 
         int i = 0;  
+        int valid_counter = 0;
         while (i < s.length()){
-            if (!hash_map.get((int)char(s[i]), value)){
+            int ASCII_key = (int)char(s[i]);
+            if ((ASCII_key == 32) &&
+                !valid_counter
+            ){
+                i++;
+                continue;
+            } else if (!hash_map.get(ASCII_key, value)){
                 // NaN
                 break;
             }
-            res = parseNums(7);
+            valid_counter++;
+            bool available = hash_map.get(ASCII_key, value);
+            res = parseNums(res, value);
             i++;
         }
-        return 1;
+        return res;
     }
 
 private:
     HashOps<int, int, int_hash> hash_map;
     int value;
 
-    int parseNums(int num){
-        static int add_num = 0; 
-        return ((num*10) + add_num);
+    int parseNums(int prev_num, int num){ 
+        return ((prev_num*10) + num);
     }
 };
 
 int main(){ 
-    string s = "134hello";
+    string s = "0000134hello";
     Solution sol;
     int res = sol.myAtoi(s);
-    // cout << res << endl;
-    // const char* str = "123lol";
+    cout << res << endl;
+    // const char* str = " 1 23lol";
     // cout << atoi(str) << endl;
     // char a = '5';
     // char* ptr = &a;
