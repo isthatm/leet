@@ -1,7 +1,6 @@
 *.exe
-vscode/
+.vscode/
 .vs/
 *.html
 *.xml
 .results/
-

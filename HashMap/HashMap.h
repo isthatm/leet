@@ -56,9 +56,6 @@ public:
         HashNode<K, V> *entry = table[hashValue];
 
         while (entry != NULL && entry->getKey() != key) {
-           // iterate through keys having the same hash value
-           cout << entry->getNext() << endl;
-        //    cout << entry->getValue() << endl;
             prev = entry;
             entry = entry->getNext();
         }

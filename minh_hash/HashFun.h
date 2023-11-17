@@ -5,6 +5,5 @@ class HashFun{
     int operator()(const K &key) const{ // reference to a constant
     // Changing the value of this reference is invalid
         return key % TABLE_SIZE;
-        
     }
 };
