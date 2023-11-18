@@ -15,9 +15,9 @@ public:
         int res = 0; //default is 0 
         int i = 0;  
         int valid_counter = 0;
+        bool is_minus = false;
         while (i < s.length()){
             int ASCII_key = (int)char(s[i]);
-
             if (!hash_map.get(ASCII_key, value)){
                 if (!valid_counter){
                     switch (ASCII_key){
@@ -26,9 +26,11 @@ public:
                         continue;
                     case 43: // "+"
                         i++;
-                        continue; // "-"
-                    case 45:
-                        if (!i){ res = -1; }
+                        continue; 
+                    case 45: // "-"
+                            is_minus = true;
+                            i++;
+                            continue; 
                     default:
                         break;
                     } 
@@ -38,10 +40,11 @@ public:
                 bool available = hash_map.get(ASCII_key, value);
                 res = parseNums(res, value);
             }
-            i++;
+        i++;
         }
 
-        return res;
+        if (is_minus) {return -res;}
+        return -res;
     }
 
 private:
@@ -54,12 +57,12 @@ private:
 };
 
 int main(){ 
-    // string s = " +12 3lol";
-    // Solution sol;
-    // int res = sol.myAtoi(s);
-    // cout << res << endl;
-    const char* str = " -1010123lol";
-    cout << atoi(str) << endl;
+    string s = " -1010123lol";
+    Solution sol;
+    int res = sol.myAtoi(s);
+    cout << res << endl;
+    // const char* str = " -1010123lol";
+    // cout << atoi(str) << endl;
     // char a = '5';
     // char* ptr = &a;
     // cout << hash_function(ptr) << endl;
