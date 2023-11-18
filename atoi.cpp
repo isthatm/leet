@@ -25,10 +25,11 @@ public:
             } else if (!hash_map.get(ASCII_key, value)){
                 // NaN
                 break;
+            } else if (hash_map.get(ASCII_key, value)) {
+                valid_counter++;
+                bool available = hash_map.get(ASCII_key, value);
+                res = parseNums(res, value);
             }
-            valid_counter++;
-            bool available = hash_map.get(ASCII_key, value);
-            res = parseNums(res, value);
             i++;
         }
         return res;
@@ -44,11 +45,11 @@ private:
 };
 
 int main(){ 
-    string s = "0000134hello";
+    string s = " 1 23lol";
     Solution sol;
     int res = sol.myAtoi(s);
     cout << res << endl;
-    // const char* str = " 1 23lol";
+    // const char* str = " -1-23lol";
     // cout << atoi(str) << endl;
     // char a = '5';
     // char* ptr = &a;
