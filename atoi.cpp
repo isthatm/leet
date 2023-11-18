@@ -17,21 +17,30 @@ public:
         int valid_counter = 0;
         while (i < s.length()){
             int ASCII_key = (int)char(s[i]);
-            if ((ASCII_key == 32) &&
-                !valid_counter
-            ){
-                i++;
-                continue;
-            } else if (!hash_map.get(ASCII_key, value)){
-                // NaN
-                break;
-            } else if (hash_map.get(ASCII_key, value)) {
+
+            if (!hash_map.get(ASCII_key, value)){
+                if (!valid_counter){
+                    switch (ASCII_key){
+                    case 32: // "space"
+                        i++;
+                        continue;
+                    case 43: // "+"
+                        i++;
+                        continue; // "-"
+                    case 45:
+                        if (!i){ res = -1; }
+                    default:
+                        break;
+                    } 
+                } else { break; }
+            } else {
                 valid_counter++;
                 bool available = hash_map.get(ASCII_key, value);
                 res = parseNums(res, value);
             }
             i++;
         }
+
         return res;
     }
 
@@ -45,12 +54,12 @@ private:
 };
 
 int main(){ 
-    string s = " 1 23lol";
-    Solution sol;
-    int res = sol.myAtoi(s);
-    cout << res << endl;
-    // const char* str = " -1-23lol";
-    // cout << atoi(str) << endl;
+    // string s = " +12 3lol";
+    // Solution sol;
+    // int res = sol.myAtoi(s);
+    // cout << res << endl;
+    const char* str = " -1010123lol";
+    cout << atoi(str) << endl;
     // char a = '5';
     // char* ptr = &a;
     // cout << hash_function(ptr) << endl;
