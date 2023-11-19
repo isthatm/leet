@@ -16,7 +16,6 @@ public:
         int i = 0;  
         int valid_counter = 0;
         bool is_minus = false;
-        bool overflow_handler = false;
 
         while (i < s.length()){
             int ASCII_key = (int)char(s[i]);
@@ -27,34 +26,32 @@ public:
                             i++;
                             continue;
                         case 43: // "+"
+                            valid_counter++;
                             i++;
                             continue; 
                         case 45: // "-"
-                                is_minus = true;
-                                i++;
-                                continue; 
+                            is_minus = true;
+                            valid_counter++;
+                            i++;
+                            continue; 
                         default:
                             break;
                     } 
                 } 
                 break; 
-            } else {
+            } else{
                 valid_counter++;
                 bool available = hash_map.get(ASCII_key, value);
-                res = parseNums(res, value);
-                if (res == INT32_MAX){
-                    overflow_handler = true;
-                    break;
+                if (is_minus){
+                    cout << "IN " << res << ", " << value << endl;
+                    res = parseNums(res, -value);
+                } else{
+                    res = parseNums(res, value);
                 }
             }
-        i++;
+            i++;
         }
 
-        if (is_minus) {
-            if (overflow_handler){
-                return -res - 1;
-            }
-            return -res;}
         return res;
     }
 
@@ -64,20 +61,36 @@ private:
 
     int parseNums(int prev_num, int num){ 
         try{
-            if (prev_num != 0 && INT32_MAX / prev_num < 10){
-                throw range_error("INT32 overflow will occur");
+            if (prev_num < 0){
+                if (prev_num == -1){ } 
+                else if (INT32_MIN / prev_num < 10){
+                    throw INT32_MIN;
+                }
+
+                if (prev_num < INT32_MIN - num){
+                    throw INT32_MIN;
+                }
             }
+            else if (prev_num > 0){
+                if (INT32_MAX / prev_num < 10){
+                    throw INT32_MAX;
+                } 
+                
+                if (prev_num > INT32_MAX - num){
+                    throw INT32_MAX;
+                }
+            }
+            int res = (prev_num*10) + num; 
+            return res;
         }
-        catch (range_error err){
-            return INT32_MAX;
+        catch (int clamped_res){
+            return clamped_res;
         }
-        int res = (prev_num*10) + num; 
-        return res;
     }
 };
 
 int main(){ 
-    string s = "+-12";
+    string s = "-42";
     Solution sol;
     int res = sol.myAtoi(s);
     cout << res << endl;
