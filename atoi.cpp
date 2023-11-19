@@ -1,6 +1,5 @@
 #include "./minh_hash/HashOps.h"
 #include <iostream>
-#include <string>
 using namespace std;
 
 class Solution {
@@ -43,7 +42,6 @@ public:
                 valid_counter++;
                 bool available = hash_map.get(ASCII_key, value);
                 if (is_minus){
-                    cout << "IN " << res << ", " << value << endl;
                     res = parseNums(res, -value);
                 } else{
                     res = parseNums(res, value);
@@ -90,8 +88,10 @@ private:
 };
 
 int main(){ 
-    string s = "-42";
+    string s = "-4:";
     Solution sol;
     int res = sol.myAtoi(s);
     cout << res << endl;
+    bool test = s[2] <= '9';
+    cout << test << endl;
 }   
