@@ -16,6 +16,8 @@ public:
         int i = 0;  
         int valid_counter = 0;
         bool is_minus = false;
+        bool overflow_handler = false;
+
         while (i < s.length()){
             int ASCII_key = (int)char(s[i]);
             if (!hash_map.get(ASCII_key, value)){
@@ -41,13 +43,18 @@ public:
                 bool available = hash_map.get(ASCII_key, value);
                 res = parseNums(res, value);
                 if (res == INT32_MAX){
+                    overflow_handler = true;
                     break;
                 }
             }
         i++;
         }
 
-        if (is_minus) {return -res;}
+        if (is_minus) {
+            if (overflow_handler){
+                return -res - 1;
+            }
+            return -res;}
         return res;
     }
 
@@ -70,7 +77,7 @@ private:
 };
 
 int main(){ 
-    string s = "-91283472332";
+    string s = "+-12";
     Solution sol;
     int res = sol.myAtoi(s);
     cout << res << endl;
