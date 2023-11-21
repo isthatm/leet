@@ -19,6 +19,10 @@ public:
         next = new MinhNode(key, value); 
     }
 
+    void updateValue(V value){
+        this->value = value;
+    }
+
     void setNext(MinhNode* next_node){
         next = next_node;
     }

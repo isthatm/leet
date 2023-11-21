@@ -77,8 +77,8 @@ private:
             if (prev_num > 0 && prev_num > INT32_MAX - num){
                 throw INT32_MAX;
             }
-         
             int res = prev_num + num; 
+
             return res;
         }
         catch (int clamped_res){

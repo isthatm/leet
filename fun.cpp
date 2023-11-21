@@ -1,7 +1,37 @@
 #include <iostream>
-#include "MinhNode.h"
-#include "HashFun.h"
 using namespace std;
+
+const int TABLE_SIZE = 100;
+// template <typename K, typename V>
+class MinhNode{
+public:
+    MinhNode(int key, int value): key(key), value(value), next(NULL){}
+
+    MinhNode* getNext(){
+        return next;
+    }
+
+    int getValue(){
+        return value;
+    }
+
+    int getKey(){
+        return key;
+    }
+
+    void setNew(int key, int value){
+        next = new MinhNode(key, value); 
+    }
+
+    void setNext(MinhNode* next_node){
+        next = next_node;
+    }
+
+private:
+    int key;
+    int value;
+    MinhNode* next;
+};
 
 /*
     There is a trade off between table size and map collision
@@ -24,29 +54,17 @@ public:
     }
 };
 
-class char_hash{
+
+// template <typename K, typename V, typename F>
+class MyHashMap{
 public:
-    unsigned long operator()(const char* str){
-        unsigned long i = 0;
-
-        for (int j = 0; str[j]; j++){
-            i += str[j];
-        }
-
-        return i % TABLE_SIZE;
-    }
-};
-
-template <typename K, typename V, typename F>
-class HashOps{
-public:
-    HashOps(){
-        hash_table = new MinhNode<K,V>* [TABLE_SIZE](); // A dynamic array of pointers to NULL
+    MyHashMap(){
+        hash_table = new MinhNode* [TABLE_SIZE](); // A dynamic array of pointers to NULL
     }
 
-    ~HashOps(){
-        MinhNode<K,V>* current_node = NULL;
-        MinhNode<K,V>* prev_node = NULL;
+    ~MyHashMap(){
+        MinhNode* current_node = NULL;
+        MinhNode* prev_node = NULL;
 
         // delete all lists of nodes within a bucket
         // then delete the buckets
@@ -61,51 +79,50 @@ public:
         delete[] hash_table;
     }
 
-    void put(K key, V value){
+    void put(int key, int value){
         // allocate the values to buckets on the heap
         auto hash_value = hash_func(key);
-        MinhNode<K,V>* current_node = hash_table[hash_value];
+        MinhNode* current_node = hash_table[hash_value];
 
         if (!hash_table[hash_value]){// No key in this bucket
-            hash_table[hash_value] = new MinhNode<K, V> (key, value);
+            hash_table[hash_value] = new MinhNode (key, value);
         } else{// put it at the end of the list in this bucket
             while (true){
-                if (current_node->getKey() == key){
-                    current_node->updateValue(value);
-                    break;
-                }
+                // cout << current_node->getValue() << endl;
                 if (!(current_node->getNext())){
-                    current_node->setNew(key, value);
                     break;
                 }
                 current_node = current_node->getNext();
             }
+            current_node->setNew(key, value);
         }
     }
 
-    bool get(K key, V &value){
+    int get(int key){
         auto hash_value = hash_func(key);
-        MinhNode<K,V>* current_node = hash_table[hash_value];
+        MinhNode* current_node = hash_table[hash_value];
+        int value = -1;
         if (!current_node){
             // value = "Not found";
-            return false;
+            return value;
         } else{
             while(current_node != NULL){
                 if (key == current_node->getKey()){
+                    cout << "INN" << endl;
                     value = current_node->getValue();
-                    return true;
+                    break;
+                    // return value;
                 }
                 current_node = current_node->getNext();
             }
-            // value = "Not found";
-            return false;
+            return value;
         }
     }
 
-    void remove(K key){
+    void remove(int key){
         auto hash_value = hash_func(key);
-        MinhNode<K,V>* current_node = hash_table[hash_value];
-        MinhNode<K,V>* prev_node = NULL;
+        MinhNode* current_node = hash_table[hash_value];
+        MinhNode* prev_node = NULL;
 
         if (!current_node){
             cout << "Value is not available for removal" << endl;
@@ -132,6 +149,21 @@ public:
     }
 
 private:
-    MinhNode<K, V>** hash_table; 
-    F hash_func;
+    MinhNode** hash_table; 
+    int_hash hash_func;
 };
+
+int main(){
+    MyHashMap* obj = new MyHashMap();
+    obj->put(1,1);
+    obj->put(2,2);
+    
+
+    int param_2 = obj->get(1);
+    param_2 = obj->get(3);
+    obj->put(2,1);
+    param_2 = obj->get(2);
+    cout << param_2 << endl;
+    obj->remove(2);
+    param_2 = obj->get(2);
+}
