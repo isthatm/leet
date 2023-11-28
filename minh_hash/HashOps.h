@@ -42,6 +42,7 @@ class HashOps{
 public:
     HashOps(){
         hash_table = new MinhNode<K,V>* [TABLE_SIZE](); // A dynamic array of pointers to NULL
+        // designated to point to another array
     }
 
     ~HashOps(){
