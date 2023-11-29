@@ -5,9 +5,9 @@ using namespace std;
 /*
 Notices:
     - handle overflow
-    - handle cases where the size of the subarray = 1
-    - handle cases when a solution is not available
-    - can use for loop
+    - handle cases where the size of the subarray = 1 DONE
+    - handle cases when a solution is not available DONE
+    - Use for loop for better clarity
 */
 
 class Solution {
@@ -32,46 +32,40 @@ public:
             // // current_sum = 2;
             // if (window_size == 3){
             //     break;}
+            if (window_size == 1){
+                current_sum = *i;
+            } else{
+                current_sum = current_sum - *(i-1) + *(i+window_size-1); 
+                cout << current_sum << endl;   
+            }      
+
+            if (window_size == 2){
+                if (current_sum < target){
+                    notFound = false;
+                }
+                if (
+                    i == (nums.end() - org_size) &&
+                    notFound
+                ){ return -1; }
+            }
 
             if (current_sum == target){
                 return window_size;
-            } 
-            
-            current_sum = current_sum - *(i-1) + *(i+window_size-1); 
-            cout << current_sum << endl;          
+            }  
             
             if (i == (nums.end() - org_size)){
-                cout << "End window: "<< endl;
-                // cout << "Found" << endl;
-                // break;
                 window_size++;
                 if (window_size > (nums.size() - org_size + 1)){
                     nums.insert(nums.end(), nums.begin(), nums.end());
                 }
-                i = nums.begin()+1;
+                i = nums.begin() + 1;
                 current_sum = init_sum(nums);
                 continue;
             }
-            // switch (window_size){
-            //     case 1:
-            //         current_sum = *i;
-            //         continue;
-            //     case 2:
-            //         if (current_sum < target){
-            //             notFound = false;
-            //         }
-            //         if (
-            //             i == (nums.end() - nums.size() / 2) &&
-            //             notFound
-            //         ){ return -1; }
-            //     default:
-            //         break;
-            // }
             i++;
-        }
-
-        return -1;
-    }
+        }   
+            return -1;
+    }  
 
 private:
     int window_size = 1;
@@ -84,7 +78,7 @@ private:
             // cout << init_window << endl;
             init_window += *i;
         }
-        cout << "init: " << init_window << endl;
+        // cout << "init: " << init_window << endl;
 
         return init_window;
     }
@@ -93,7 +87,7 @@ private:
 
 int main(){
     Solution sol;
-    vector<int> nums = {1,2,3,4,5,6,7};
-    int res = sol.minSizeSubarray(nums, 10);
+    vector<int> nums = {2, 4, 6, 8};
+    int res = sol.minSizeSubarray(nums, 3);
     cout << "Minimum subarray length: " << res << endl;
 }
