@@ -2,6 +2,7 @@
 #include <vector>
 #define __STDC_LIMIT_MACROS
 #include <stdint.h>
+#include <chrono>
 
 using namespace std;
 
@@ -26,16 +27,13 @@ public:
         append_at = org_nums.size() + 2;
         nums.insert(nums.end(), org_nums.begin(), org_nums.end());
         current_sum = init_sum(nums);
-        // for (vector<int>::iterator = nums.begin(); i != nums.end(); i++){cout << i << " ;"}
+     
         // Sliding
         vector<int>::iterator i = nums.begin()+1;
         
-        // cout << "Start: " << org_nums.size() << endl;
         while (true){
-            for (vector<int>::iterator i = nums.begin(); i != nums.end(); i++){cout << *i << " ;";}
-            // if (window_size == 30){break;}
             try {
-                int idx = i - nums.begin();
+                // int idx = i - nums.begin();
                 if (current_sum == target){
                     return window_size;
                 } 
@@ -46,9 +44,8 @@ public:
                     current_sum = current_sum - *(i-1);
                     overflowCheck(current_sum, *(i-1+window_size));
                     current_sum += *(i-1+window_size); 
-                    // cout << current_sum << endl;   
                 }  
-                cout << "current window: " << window_size << "; Current i: " << idx << "; Current Sum: "<< current_sum << "; Add: " << *(i-1+window_size)  << endl;  
+                // cout << "current window: " << window_size << "; Current i: " << idx << "; Current Sum: "<< current_sum << "; Add: " << *(i-1+window_size)  << endl;  
 
                 if (current_sum == target){
                     return window_size;
@@ -59,8 +56,10 @@ public:
                                
                 // try new window size
                 if (i == (nums.begin() + org_nums.size() - 1)){ 
-                    cout << "Window stops at: " << *i << endl;
-                    if (notFound) { cout <<"Not found."<< endl; break; }
+                    // cout << "Window stops at: " << *i << endl;
+                    if (notFound) { 
+                        break; 
+                    }
                     else { notFound = true; }
                     window_size++;
                     if (window_size == append_at){
@@ -74,7 +73,6 @@ public:
                 i++;
             }   
             catch (overflow_error msg){
-                // cout << msg.what() << ": " << current_sum << endl;
                 return -1;
             }
         }
@@ -99,7 +97,7 @@ private:
 
     void overflowCheck(int a, int b){
         if (INT32_MAX - b < a){
-            cout << "    Overflow: " << a << "; " << b << endl;
+            // cout << "    Overflow: " << a << "; " << b << endl;
             throw overflow_error("Integer overflow.");
         }
     }
@@ -107,11 +105,16 @@ private:
 
 
 int main(){
+
     Solution sol;
-    // vector<int> nums = {1,2,3};
-    vector<int> nums = {8}; // target = 85
-    // vector<int> nums = {2,1,5,7,7,1,6,3}; // target = 39
-    int res = sol.minSizeSubarray(nums, 68);
+    // vector<int> nums = {8,10,1,13,1,2,1,13,13,11,7,8,10,8,4,8,5,5,10,2}; // target = 85
+    vector<int> nums = {60084,23369,61831,23772,7826,5873,48429,8705,52687,62301,13700,41302,54544,57165,12325,15252,10287,33520,43163,6206,37310,25511,29615,7672,40678,19425,8391,17751,45673,19834,38436,37296,52596,54554,2234,5434,3673,25437,21913,16441,43378,6954,60176,32693,46022,57368,54741,6787,61010,32945,35353,5804,1460,47306,22955,37105,28131,4873,3632,20279,21170,51870,38972,36229,28587,39984,53190,28604,45130,27205,1536,27644,361,45049,51646,11255,28112,27093,12286,36844,47701,872,45909,54320,62687,19158,16140,21886,17431,55125,31310,43907,811,26534,2756,26681,7488,44290,27573,13809,63448,59776,48705,9664,1300};
+    auto start = chrono::high_resolution_clock::now();
+    int res = sol.minSizeSubarray(nums, 12893248);
+    auto stop = chrono::high_resolution_clock::now();
+
     cout << "Minimum subarray length: " << res << endl;
-    // // cout << 8 % 3 << endl;
+
+    auto duration = chrono::duration_cast<chrono::microseconds>(stop-start); 
+    cout << "Execution time: " << duration.count() << "us" <<endl;
 }
