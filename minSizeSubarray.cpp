@@ -16,14 +16,19 @@ Notices:
 class Solution {
 public:
     int minSizeSubarray(vector<int>& nums, int target) {
-        if (nums.size() == 1 && nums[0] > target){return -1;}
+        if (nums.size() == 1){
+            if (nums[0] > target){ return -1;}
+            else if(target % nums[0] == 0){ return target / nums[0];}
+            else {return -1;}
+        }
+        
         vector<int> org_nums = nums;
         append_at = org_nums.size() + 2;
         nums.insert(nums.end(), org_nums.begin(), org_nums.end());
         current_sum = init_sum(nums);
         // for (vector<int>::iterator = nums.begin(); i != nums.end(); i++){cout << i << " ;"}
         // Sliding
-        vector<int>::iterator i = nums.begin();
+        vector<int>::iterator i = nums.begin()+1;
         
         // cout << "Start: " << org_nums.size() << endl;
         while (true){
@@ -88,6 +93,7 @@ private:
         for (vector<int>::iterator i = curr_nums.begin(); i != curr_nums.begin() + window_size; i++){
             init_window += *i;
         }
+
         return init_window;
     }
 
