@@ -80,7 +80,6 @@ public:
         auto hash_value = hash_func(key);
         MinhNode<K,V>* current_node = hash_table[hash_value];
         if (!current_node){
-            // value = "Not found";
             return false;
         } else{
             while(current_node != NULL){
@@ -89,8 +88,7 @@ public:
                     return true;
                 }
                 current_node = current_node->getNext();
-            }
-            // value = "Not found";
+            } 
             return false;
         }
     }
