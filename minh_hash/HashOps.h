@@ -16,14 +16,6 @@ using namespace std;
       always points to the first element
 */
 
-class int_hash{
-public:
-    int operator()(const int &key) const{ // reference to a constant
-    // Changing the value of this reference is invalid
-        return key % 10;
-    }
-};
-
 class char_hash{
 public:
     unsigned long operator()(const char* str){
