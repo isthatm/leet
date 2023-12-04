@@ -148,4 +148,3 @@ int main(){
     auto duration = chrono::duration_cast<chrono::microseconds>(stop-start); 
     cout << "Execution time: " << duration.count() << "us" <<endl;
 }
-
