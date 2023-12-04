@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 #include <set>
 #include "./minh_hash/HashOps.h"
 

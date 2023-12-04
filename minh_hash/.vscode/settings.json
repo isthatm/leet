@@ -4,5 +4,6 @@
         "xlocmon": "cpp",
         "xlocnum": "cpp",
         "xloctime": "cpp"
-    }
+    },
+    "editor.inlineSuggest.showToolbar": "onHover"
 }
