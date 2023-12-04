@@ -1,11 +1,12 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #define __STDC_LIMIT_MACROS
-#include <stdint.h>
 #include <chrono>
+#define UPPER_BOUND 1e5 + 1
+using namespace std; 
 
-using namespace std;
-
+typedef vector<int> vct;
 /*
 Notices:
     - handle overflow
@@ -14,26 +15,25 @@ Notices:
     - if all windows in within a window size > target -> not viable also
 */
 
-class Solution {
+class Solution1 {
 public:
-    int minSizeSubarray(vector<int>& nums, int target) {
+    int minSizeSubarray(vct& nums, int target) {
         if (nums.size() == 1){
             if (nums[0] > target){ return -1;}
             else if(target % nums[0] == 0){ return target / nums[0];}
             else {return -1;}
         }
         
-        vector<int> org_nums = nums;
+        vct org_nums = nums;
         append_at = org_nums.size() + 2;
         nums.insert(nums.end(), org_nums.begin(), org_nums.end());
         current_sum = init_sum(nums);
      
         // Sliding
-        vector<int>::iterator i = nums.begin()+1;
+        vct::iterator i = nums.begin()+1;
         
         while (true){
             try {
-                // int idx = i - nums.begin();
                 if (current_sum == target){
                     return window_size;
                 } 
@@ -45,7 +45,6 @@ public:
                     overflowCheck(current_sum, *(i-1+window_size));
                     current_sum += *(i-1+window_size); 
                 }  
-                // cout << "current window: " << window_size << "; Current i: " << idx << "; Current Sum: "<< current_sum << "; Add: " << *(i-1+window_size)  << endl;  
 
                 if (current_sum == target){
                     return window_size;
@@ -56,10 +55,7 @@ public:
                                
                 // try new window size
                 if (i == (nums.begin() + org_nums.size() - 1)){ 
-                    // cout << "Window stops at: " << *i << endl;
-                    if (notFound) { 
-                        break; 
-                    }
+                    if (notFound) { break; }
                     else { notFound = true; }
                     window_size++;
                     if (window_size == append_at){
@@ -86,9 +82,9 @@ private:
     bool notFound = true;
     int append_at;
 
-    int init_sum (vector<int> &curr_nums){
+    int init_sum (vct &curr_nums){
         int init_window = 0;
-        for (vector<int>::iterator i = curr_nums.begin(); i != curr_nums.begin() + window_size; i++){
+        for (vct::iterator i = curr_nums.begin(); i != curr_nums.begin() + window_size; i++){
             init_window += *i;
         }
 
@@ -97,20 +93,54 @@ private:
 
     void overflowCheck(int a, int b){
         if (INT32_MAX - b < a){
-            // cout << "    Overflow: " << a << "; " << b << endl;
             throw overflow_error("Integer overflow.");
         }
     }
 };
 
+class Solution2{
+public:
+    /*
+        Approach:
+            1. Determine if n x sum(nums) = target
+            2. Find the remainder -> the remainder is the new target
+            3. Construct a temporary nums vector from 2 nums vectors to implement 2.
+    */
+    int minSizeSubarray(vector<int> &nums, int target){
+        vector<int> temp = nums;
+        temp.insert(temp.end(), nums.begin(), nums.end());
+        for(int i = 0; i<nums.size(); i++){sums += nums[i];}
+        int remainder = target % sums;
+        int n_nums = target / sums;
+        if (!remainder){return n_nums*nums.size();}
+        target = remainder; 
+       
+        sums = 0;
+        int l_ptr = 0;
+        for (int r_ptr = 0; r_ptr < temp.size(); r_ptr++){
+            sums += temp[r_ptr];
+            while (sums > target){
+                sums -= temp[l_ptr];
+                l_ptr++;
+            }
+            if (sums == target){
+                ans = min(ans, r_ptr - l_ptr + 1);
+            }
+        }
+        if (ans == UPPER_BOUND){return -1;}
+        else{return n_nums*nums.size() + ans;}
+    }
+private:
+    long sums = 0;
+    int ans = UPPER_BOUND;
+};
+
 
 int main(){
-
-    Solution sol;
-    // vector<int> nums = {8,10,1,13,1,2,1,13,13,11,7,8,10,8,4,8,5,5,10,2}; // target = 85
-    vector<int> nums = {60084,23369,61831,23772,7826,5873,48429,8705,52687,62301,13700,41302,54544,57165,12325,15252,10287,33520,43163,6206,37310,25511,29615,7672,40678,19425,8391,17751,45673,19834,38436,37296,52596,54554,2234,5434,3673,25437,21913,16441,43378,6954,60176,32693,46022,57368,54741,6787,61010,32945,35353,5804,1460,47306,22955,37105,28131,4873,3632,20279,21170,51870,38972,36229,28587,39984,53190,28604,45130,27205,1536,27644,361,45049,51646,11255,28112,27093,12286,36844,47701,872,45909,54320,62687,19158,16140,21886,17431,55125,31310,43907,811,26534,2756,26681,7488,44290,27573,13809,63448,59776,48705,9664,1300};
+    Solution1 sol;
+    vct nums = {1,6,5,5,1,1,2,5,3,1,5,3,2,4,6,6}; // target = 85
     auto start = chrono::high_resolution_clock::now();
-    int res = sol.minSizeSubarray(nums, 12893248);
+    int res = sol.minSizeSubarray(nums, 56);
     auto stop = chrono::high_resolution_clock::now();
 
     cout << "Minimum subarray length: " << res << endl;
@@ -118,3 +148,4 @@ int main(){
     auto duration = chrono::duration_cast<chrono::microseconds>(stop-start); 
     cout << "Execution time: " << duration.count() << "us" <<endl;
 }
+
