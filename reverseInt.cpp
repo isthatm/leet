@@ -12,11 +12,9 @@ public:
             temp /= 10;
             if (temp != 0) {res *= 10;}
         }
-        if (INT16_MIN >= res) {
+        if (INT32_MIN >= res || res >= INT32_MAX) {
             return 0;
-        } else if (res >= INT16_MAX) {
-            return 0;
-        }
+        } 
         return res;
     }
 };
