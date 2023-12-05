@@ -1,3 +1,6 @@
+#ifndef NODE
+#define NODE
+
 template <typename K, typename V>
 class MinhNode{
 public:
@@ -32,3 +35,5 @@ private:
     V value;
     MinhNode* next;
 };
+
+#endif

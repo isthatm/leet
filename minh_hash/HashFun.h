@@ -1,3 +1,6 @@
+#ifndef HASH_FUN
+#define HASH_FUN
+
 const int TABLE_SIZE = 10; // this is equal to the number of buckets
 
 class int_hash{
@@ -7,3 +10,5 @@ public:
         return key % 10;
     }
 };
+
+#endif

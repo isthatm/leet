@@ -1,4 +1,6 @@
 #include "HashOps.h"
+#include "HashFun.h" // If there wasn't #ifndef preprocessor in HashFun.h 
+// this would have caused an error: redefinition
 #include <iostream>
 using namespace std;
 
