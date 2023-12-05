@@ -1,2 +1,2 @@
 # leet
-This repo is created for practicing DS and algorithm
+I created this repo to practice DS and algorithm problems posted on LeetCode
