@@ -1,7 +1,6 @@
 #include "HashOps.h"
-#include "HashFun.h" // If there wasn't #ifndef preprocessor in HashFun.h 
+#include "HashFun.h" // If there hadn't been #ifndef preprocessor in HashFun.h 
 // this would have caused an error: redefinition
-#include <iostream>
 using namespace std;
 
 int main(){
@@ -11,7 +10,7 @@ int main(){
     hash_map.put(1, "one");
     hash_map.put(1, "two");
     res = hash_map.get(1, value);
-    cout << value << endl;
+    cout << "Stored in 1: " << value << endl;
     // hash_map.put(11, "eleven");
     // hash_map.put(21, "twenty one");
     // hash_map.put(12, "twelve");

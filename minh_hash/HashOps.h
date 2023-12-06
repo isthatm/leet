@@ -1,3 +1,6 @@
+#ifndef HASH_MAP
+#define HASH_MAP
+
 #include <iostream>
 #include "MinhNode.h"
 #include "HashFun.h"
@@ -126,3 +129,5 @@ private:
     MinhNode<K, V>** hash_table; 
     F hash_func;
 };
+
+#endif
