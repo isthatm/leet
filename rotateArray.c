@@ -3,9 +3,7 @@
 
 void partialRotation(int* nums, int start, int end) {
     int num_swaps = (end - start + 1) / 2;
-    // printf("%d \n", (end - start + 1) / 2);
     while (num_swaps > 0) {
-        // printf("HEY %d \n", num_swaps);
         int temp = nums[start];
         nums[start] = nums[end];
         nums[end] = temp;
