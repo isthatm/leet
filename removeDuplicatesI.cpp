@@ -12,7 +12,8 @@ public:
             if (
                 i == nums.end() || (*i - *(i-1)) != 0
             ) {
-                nums.erase(p_ptr, i-1);
+                nums.erase(p_ptr, i-1); // erase from [p_ptr, i-1)
+                // if nums.erase(same, same) => nothing is deleted
                 i -= (i - p_ptr) - 1; 
                 p_ptr ++;
             }
