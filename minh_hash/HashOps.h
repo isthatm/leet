@@ -69,8 +69,7 @@ public:
                 if (current_node->getKey() == key){
                     current_node->updateValue(value);
                     break;
-                }
-                if (!(current_node->getNext())){
+                } else if (!(current_node->getNext())){
                     current_node->setNew(key, value);
                     break;
                 }
@@ -79,14 +78,14 @@ public:
         }
     }
 
-    bool get(K key, V &value){
+    bool get(K key, V &value) {
         auto hash_value = hash_func(key);
         MinhNode<K,V>* current_node = hash_table[hash_value];
-        if (!current_node){
+        if (!current_node) {
             return false;
-        } else{
-            while(current_node != NULL){
-                if (key == current_node->getKey()){
+        } else {
+            while(current_node != NULL) {
+                if (key == current_node->getKey()) {
                     value = current_node->getValue();
                     return true;
                 }
@@ -101,13 +100,10 @@ public:
         MinhNode<K,V>* current_node = hash_table[hash_value];
         MinhNode<K,V>* prev_node = NULL;
 
-        if (!current_node){
-            cout << "Value is not available for removal" << endl;
-            return;
-        } else{
-            while(current_node != NULL){
-                if (key == current_node->getKey()){
-                    if (!prev_node){
+        if (current_node != 0) {
+            while(current_node != NULL) {
+                if (key == current_node->getKey()) {
+                    if (!prev_node) {
                         hash_table[hash_value] = current_node->getNext();
                         return;
                     }
