@@ -9,9 +9,12 @@
     [3, 1, 7, 8, 9]
     [3,4]
     [0,1]
+    [1,2]
     [5]
     [0]
     [2,3,3,3]
+    [4,4,0,0] - Expect hIndex = 2
+    [1,3,3] - Expect hIndex = 2
 */
 
 int compare (const void* a, const void* b) {
@@ -19,19 +22,20 @@ int compare (const void* a, const void* b) {
 }
 
 int hIndex(int* citations, int citationsSize) {
-    if (citationsSize == 1) {return citations;}
     qsort(citations, citationsSize, sizeof(int), compare);
     int i = 0;
-    int h_idx = citations[0];
+    int h_idx = citationsSize;
+    int remainings;
     while (i < citationsSize) {
-        if (citations[i] != h_idx) {
-            if (citationsSize - i >= h_idx) {
-                h_idx = i;
-            }
+        remainings = citationsSize - i;
+        if (citations[i] <= remainings) {
+            h_idx = citations[i];
+        } else {
+            h_idx = (remainings > h_idx) ? remainings : h_idx;
         }
         i++;
-    }
-    
+    }   
+    return h_idx;    
 }
 
 int main() {
