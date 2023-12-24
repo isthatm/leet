@@ -36,8 +36,10 @@ template <typename K, typename V, typename F>
 class HashOps{
 public:
     HashOps(){
-        hash_table = new MinhNode<K,V>* [TABLE_SIZE](); // A dynamic array of pointers to NULL
-        // designated to point to another array
+        hash_table = new MinhNode<K,V>* [TABLE_SIZE](); 
+        // A dynamic array of pointers
+        // hash_table is a DOUBLE pointer pointing to the first 
+        // element of the hash_table array of pointers (which is a pointer)
     }
 
     ~HashOps(){

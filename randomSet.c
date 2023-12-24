@@ -1,6 +1,9 @@
 /*
     Problem 380. Insert Delete GetRandom O(1)
     In this problem the value is the key and vice versa
+    TODO: 
+    - Free the nodes on the linked lists also
+    - Create a make_node function
 */
 #include <stdlib.h>
 #include <stdbool.h>
@@ -8,14 +11,14 @@
 
 #define TABLE_SIZE 127
 
-typedef struct {
+typedef struct Node {
     unsigned value;
     int hash;
     struct Node* next;
-} Node;
+} Node_t;
 
 typedef struct {
-    Node **buckets;
+    Node_t **buckets;
 } RandomizedSet;
 
 int hash_fun(int key) {
@@ -26,9 +29,11 @@ int hash_fun(int key) {
     return u_key % TABLE_SIZE;
 }
 
+/*  Hash table operating functions   */
+
 RandomizedSet *randomizedSetCreate() {
     RandomizedSet *map_t;
-    map_t->buckets = (Node **)calloc(TABLE_SIZE, sizeof(Node *));
+    map_t->buckets = (Node_t **)calloc(TABLE_SIZE, sizeof(Node_t *));
     return map_t;
 }
 
@@ -45,9 +50,20 @@ int randomizedSetGetRandom(RandomizedSet *obj) {
 }
 
 void randomizedSetFree(RandomizedSet *obj) {
-    // TODO: Free the nodes on the linked lists also
+    Node_t *cur_node = NULL;
+    Node_t *prev_node = NULL; 
+
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        cur_node = obj->buckets[i];
+        if (cur_node != NULL) {
+            prev_node = cur_node;
+            cur_node = cur_node->next;
+            free (prev_node);
+        }
+    }
     free(obj);
 }
+
 
 int main() {
     RandomizedSet* obj = randomizedSetCreate();
