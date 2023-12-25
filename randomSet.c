@@ -4,6 +4,8 @@
     TODO: 
     - Free the nodes on the linked lists also
     - Create a make_node function
+    - Create an aray to store filled buckets
+    - Investigate what does bool in insert means?
 */
 #include <stdlib.h>
 #include <stdbool.h>
@@ -11,9 +13,10 @@
 
 #define TABLE_SIZE 127
 
+
 typedef struct Node {
-    unsigned value;
-    int hash;
+    int value;
+    unsigned hash;
     struct Node* next;
 } Node_t;
 
@@ -29,6 +32,14 @@ int hash_fun(int key) {
     return u_key % TABLE_SIZE;
 }
 
+Node_t *make_node(int val, unsigned hash) {
+    Node_t *new_node = (Node_t *)malloc(sizeof(Node_t *));
+    new_node->value = val;
+    new_node->hash = hash;
+    new_node->next = NULL;
+    return new_node;  
+} 
+
 /*  Hash table operating functions   */
 
 RandomizedSet *randomizedSetCreate() {
@@ -38,7 +49,20 @@ RandomizedSet *randomizedSetCreate() {
 }
 
 bool randomizedSetInsert(RandomizedSet *obj, int val) {
-    
+    unsigned hash_val = hash_fun(val);
+    Node_t *node = make_node(val, hash_val);
+    Node_t *current_node = obj->buckets[hash_val];
+
+    if (!current_node) { 
+        current_node = node;
+    } else {
+        while (current_node->next != NULL) {
+            current_node = current_node->next;
+        }
+        current_node->next = node; 
+    }
+    return true;
+
 }
 
 bool randomizedSetRemove(RandomizedSet *obj, int val) {
