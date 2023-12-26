@@ -15,13 +15,14 @@
 
 
 typedef struct Node {
-    int value;
     unsigned hash;
+    int value; 
     struct Node* next;
 } Node_t;
 
 typedef struct {
     Node_t **buckets;
+    // Node_t **buckets[TABLE_SIZE];
 } RandomizedSet;
 
 int hash_fun(int key) {
@@ -33,7 +34,7 @@ int hash_fun(int key) {
 }
 
 Node_t *make_node(int val, unsigned hash) {
-    Node_t *new_node = (Node_t *)malloc(sizeof(Node_t *));
+    Node_t *new_node = (Node_t *)malloc(sizeof(Node_t));
     new_node->value = val;
     new_node->hash = hash;
     new_node->next = NULL;
@@ -43,9 +44,20 @@ Node_t *make_node(int val, unsigned hash) {
 /*  Hash table operating functions   */
 
 RandomizedSet *randomizedSetCreate() {
-    RandomizedSet *map_t;
-    map_t->buckets = (Node_t **)calloc(TABLE_SIZE, sizeof(Node_t *));
-    return map_t;
+    RandomizedSet map_t = {
+        .buckets = (Node_t **)calloc(TABLE_SIZE, sizeof(Node_t *))
+        // .buckets = (Node_t **)malloc(TABLE_SIZE * sizeof(Node_t *))
+        // .buckets = {NULL}
+    };
+    printf("%d \n", sizeof(Node_t *));
+    RandomizedSet *map_ptr = &map_t;
+    Node_t sample_node = {.hash = 12345, .value = 3, .next = NULL};
+    // for (int i = 0; i < TABLE_SIZE; i++) {
+    //     // map_ptr->buckets[i] = sample_node;
+    //     printf("%d \n", map_ptr->buckets[i]);
+    // }
+    map_ptr->buckets[0] = &sample_node;
+    return map_ptr;
 }
 
 bool randomizedSetInsert(RandomizedSet *obj, int val) {
@@ -56,13 +68,16 @@ bool randomizedSetInsert(RandomizedSet *obj, int val) {
     if (!current_node) { 
         current_node = node;
     } else {
-        while (current_node->next != NULL) {
+        while (current_node != NULL) {
+            printf("Loop \n");
+            if (current_node->value == val) {
+                return false;
+            } 
             current_node = current_node->next;
         }
-        current_node->next = node; 
+        current_node = node; 
     }
     return true;
-
 }
 
 bool randomizedSetRemove(RandomizedSet *obj, int val) {
@@ -78,7 +93,8 @@ void randomizedSetFree(RandomizedSet *obj) {
     Node_t *prev_node = NULL; 
 
     for (int i = 0; i < TABLE_SIZE; i++) {
-        cur_node = obj->buckets[i];
+        printf("current bucket: %d \n", obj->buckets[i]);
+        cur_node = obj->buckets[i]; 
         if (cur_node != NULL) {
             prev_node = cur_node;
             cur_node = cur_node->next;
@@ -90,7 +106,12 @@ void randomizedSetFree(RandomizedSet *obj) {
 
 
 int main() {
+    printf("What's wrong? \n");
     RandomizedSet* obj = randomizedSetCreate();
+    printf("What's wrong? \n");
+    // bool param_1 = randomizedSetInsert(obj, 1);
+    // bool param_2 = randomizedSetInsert(obj, 1);
+    // printf("Can insert (?): %d \n", param_2);
     randomizedSetFree(obj);
 }
 
@@ -105,3 +126,19 @@ int main() {
  
  * randomizedSetFree(obj);
 */
+
+// typedef struct {
+//     int tyre;
+//     char brand[20];  
+// } Car;
+
+// int main () {
+//     // Car *car1 = (Car *)malloc(20*sizeof(Car));
+//     Car **car1[20] = {NULL};
+//     Car **car2 = (Car **)calloc(20, sizeof(Car*));
+//     printf("%d; %d", sizeof(car1), sizeof(car2));
+//     // Car actual_obj = {.tyre = 20};
+//     // car1 = &actual_obj;
+//     // car1->tyre = 30;
+//     // printf("%d \n", car1->tyre);
+// }
