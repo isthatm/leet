@@ -102,23 +102,20 @@ public:
         MinhNode<K,V>* current_node = hash_table[hash_value];
         MinhNode<K,V>* prev_node = NULL;
 
-        if (current_node != 0) {
-            while(current_node != NULL) {
-                if (key == current_node->getKey()) {
-                    if (!prev_node) {
-                        hash_table[hash_value] = current_node->getNext();
-                        return;
-                    }
-
-                    prev_node->setNext(current_node->getNext());
-                    delete current_node;
-                    delete prev_node;
-                    return;
+        while(current_node != NULL) {
+            if (key == current_node->getKey()) {
+                if (!prev_node) {
+                    hash_table[hash_value] = current_node->getNext();
+                    // return;
                 }
-                prev_node = current_node;
-                current_node = current_node->getNext();
-            }  
-        }
+                prev_node->setNext(current_node->getNext());
+                delete current_node;
+                // delete prev_node;
+                return;
+            }
+            prev_node = current_node;
+            current_node = current_node->getNext();
+        }  
         cout << "Value is not available for removal" << endl;
         delete prev_node;
     }
