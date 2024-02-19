@@ -44,20 +44,21 @@ Node_t *make_node(int val, unsigned hash) {
 /*  Hash table operating functions   */
 
 RandomizedSet *randomizedSetCreate() {
-    RandomizedSet map_t = {
-        .buckets = (Node_t **)calloc(TABLE_SIZE, sizeof(Node_t *))
+    RandomizedSet *map_t = (RandomizedSet *)malloc(sizeof(RandomizedSet));
+    map_t->buckets = (Node_t **)calloc(TABLE_SIZE, sizeof(Node_t *));
+        // .buckets = (Node_t **)calloc(TABLE_SIZE, sizeof(Node_t *))
         // .buckets = (Node_t **)malloc(TABLE_SIZE * sizeof(Node_t *))
         // .buckets = {NULL}
-    };
-    printf("%d \n", sizeof(Node_t *));
-    RandomizedSet *map_ptr = &map_t;
-    Node_t sample_node = {.hash = 12345, .value = 3, .next = NULL};
+    // Node_t sample_node = {.hash = 12345, .value = 3, .next = NULL};
+    int val = 3;
+    unsigned hash = 12345;
+    Node_t *sample_node = make_node(val, hash);
     // for (int i = 0; i < TABLE_SIZE; i++) {
     //     // map_ptr->buckets[i] = sample_node;
     //     printf("%d \n", map_ptr->buckets[i]);
     // }
-    map_ptr->buckets[0] = &sample_node;
-    return map_ptr;
+    map_t->buckets[0] = sample_node;
+    return map_t;
 }
 
 bool randomizedSetInsert(RandomizedSet *obj, int val) {
@@ -93,12 +94,13 @@ void randomizedSetFree(RandomizedSet *obj) {
     Node_t *prev_node = NULL; 
 
     for (int i = 0; i < TABLE_SIZE; i++) {
-        printf("current bucket: %d \n", obj->buckets[i]);
+        // printf("%d", len(obj->buckets));
+        // printf("current bucket: %d \n", obj->buckets[i]);
         cur_node = obj->buckets[i]; 
         if (cur_node != NULL) {
             prev_node = cur_node;
             cur_node = cur_node->next;
-            free (prev_node);
+            free(prev_node);
         }
     }
     free(obj);
