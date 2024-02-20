@@ -10,8 +10,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <time.h>
 
 #define TABLE_SIZE 127
+#define MAGIC_NUMBER 0x45d9f3b
 
 
 typedef struct Node {
@@ -27,8 +29,8 @@ typedef struct RandomizedSet {
 
 int hash_fun(int key) {
     unsigned u_key  = (unsigned) key;
-    u_key = ((u_key >> 16) ^ u_key) * 0x45d9f3b;
-    u_key = ((u_key >> 16) ^ u_key) * 0x45d9f3b;
+    u_key = ((u_key >> 16) ^ u_key) * MAGIC_NUMBER;
+    u_key = ((u_key >> 16) ^ u_key) * MAGIC_NUMBER;
     u_key = (u_key >> 16) ^ u_key;
     return u_key % TABLE_SIZE;
 }
@@ -46,18 +48,6 @@ Node_t *make_node(int val, unsigned hash) {
 RandomizedSet *randomizedSetCreate() {
     RandomizedSet *map_t = (RandomizedSet *)malloc(sizeof(RandomizedSet));
     map_t->buckets = (Node_t **)calloc(TABLE_SIZE, sizeof(Node_t *));
-        // .buckets = (Node_t **)calloc(TABLE_SIZE, sizeof(Node_t *))
-        // .buckets = (Node_t **)malloc(TABLE_SIZE * sizeof(Node_t *))
-        // .buckets = {NULL}
-    // Node_t sample_node = {.hash = 12345, .value = 3, .next = NULL};
-    int val = 3;
-    unsigned hash = 12345;
-    Node_t *sample_node = make_node(val, hash);
-    // for (int i = 0; i < TABLE_SIZE; i++) {
-    //     // map_ptr->buckets[i] = sample_node;
-    //     printf("%d \n", map_ptr->buckets[i]);
-    // }
-    map_t->buckets[0] = sample_node;
     return map_t;
 }
 
@@ -71,11 +61,12 @@ bool randomizedSetInsert(RandomizedSet *obj, int val) {
         obj->buckets[hash_val] = node;
     } else {
         while (true) {
-            printf("Loop \n");
+            printf("Loop: %d\n", current_node->value);
             if (current_node->value == val) {
                 return false;
             } else if (!(current_node->next)) {
                 current_node->next = node; 
+                printf("GOT it, should not see no Loop\n");
                 break;
             }
             current_node = current_node->next;
@@ -107,6 +98,34 @@ bool randomizedSetRemove(RandomizedSet *obj, int val) {
 }
 
 int randomizedSetGetRandom(RandomizedSet *obj) {
+    // Initialize a table of non-blank buckets
+    int buckets_table_size = 0;
+    RandomizedSet *random_map_t = (RandomizedSet *)malloc(sizeof(RandomizedSet));
+    random_map_t->buckets = (Node_t **)calloc(buckets_table_size, sizeof(Node_t *));
+
+    Node_t *bucket;
+    for (int i=0; i<TABLE_SIZE; i++) {
+        bucket = obj->buckets[i];
+        if (obj->buckets[i] != NULL) { 
+            printf("Bucket No %d: ~NULL\n", i);
+            buckets_table_size++;
+            random_map_t->buckets = (Node_t **)realloc(random_map_t->buckets, buckets_table_size * sizeof(Node_t *));
+            random_map_t->buckets[buckets_table_size - 1] = bucket;
+        }
+        else {
+            printf("Bucket No %d: NULL\n", i);
+        }
+    }
+    for (int i=0; i < buckets_table_size; i++) {
+        printf("Filled bucket value: %d", random_map_t->buckets[i]->value);
+    }
+    free(random_map_t->buckets);
+    free(random_map_t);
+    return 1;
+}
+
+int getRandomBase(){
+    
 }
 
 void randomizedSetFree(RandomizedSet *obj) {
@@ -117,7 +136,7 @@ void randomizedSetFree(RandomizedSet *obj) {
         if (cur_node != NULL) {
             prev_node = cur_node;
             cur_node = cur_node->next;
-            free (prev_node);
+            free(prev_node);
             prev_node = NULL;
         }
     }
@@ -126,34 +145,18 @@ void randomizedSetFree(RandomizedSet *obj) {
 }
 
 int main() {
+    // Driver code
     RandomizedSet* obj = randomizedSetCreate();
-  
-
     bool set1 = randomizedSetInsert(obj, 122);
     bool set2 = randomizedSetInsert(obj, 117);
-    // printf("Can insert 117: %d \n", set2);
     bool set3 = randomizedSetInsert(obj, 81);
     set2 = randomizedSetInsert(obj, 81); // can still insert 118 and 81
     printf("Can insert 81: %d \n", set2);
 
     bool res1 = randomizedSetRemove(obj, 81);
     printf("Can remove 81: %d \n", res1);
-    // printf("Available 117: %d \n", obj->buckets[3]->value);
-    // for (int i = 0; i < 128; i++) {
-    //     randomizedSetInsert(obj, i);
-    // }
-
+    set2 = randomizedSetInsert(obj, 81); // can still insert 118 and 81
+    printf("Can insert 81: %d \n", set2);
+    randomizedSetGetRandom(obj);
     randomizedSetFree(obj);
 }
-
-/**
- * Your RandomizedSet struct will be instantiated and called as such:
- * RandomizedSet* obj = randomizedSetCreate();
- * bool param_1 = randomizedSetInsert(obj, val);
- 
- * bool param_2 = randomizedSetRemove(obj, val);
- 
- * int param_3 = randomizedSetGetRandom(obj);
- 
- * randomizedSetFree(obj);
-*/
