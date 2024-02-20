@@ -46,7 +46,18 @@ Node_t *make_node(int val, unsigned hash) {
 RandomizedSet *randomizedSetCreate() {
     RandomizedSet *map_t = (RandomizedSet *)malloc(sizeof(RandomizedSet));
     map_t->buckets = (Node_t **)calloc(TABLE_SIZE, sizeof(Node_t *));
-
+        // .buckets = (Node_t **)calloc(TABLE_SIZE, sizeof(Node_t *))
+        // .buckets = (Node_t **)malloc(TABLE_SIZE * sizeof(Node_t *))
+        // .buckets = {NULL}
+    // Node_t sample_node = {.hash = 12345, .value = 3, .next = NULL};
+    int val = 3;
+    unsigned hash = 12345;
+    Node_t *sample_node = make_node(val, hash);
+    // for (int i = 0; i < TABLE_SIZE; i++) {
+    //     // map_ptr->buckets[i] = sample_node;
+    //     printf("%d \n", map_ptr->buckets[i]);
+    // }
+    map_t->buckets[0] = sample_node;
     return map_t;
 }
 
