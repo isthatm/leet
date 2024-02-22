@@ -10,12 +10,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <time.h>
 
 #define TABLE_SIZE 127
 #define MAGIC_NUMBER 0x45d9f3b
-#define SEED 280598
-
 
 typedef struct Node {
     unsigned hash;
@@ -25,7 +22,6 @@ typedef struct Node {
 
 typedef struct RandomizedSet {
     Node_t **buckets;
-    // Node_t **buckets[TABLE_SIZE];
 } RandomizedSet;
 
 int hash_fun(int key) {
@@ -54,7 +50,6 @@ RandomizedSet *randomizedSetCreate() {
 
 bool randomizedSetInsert(RandomizedSet *obj, int val) {
     unsigned hash_val = hash_fun(val);
-    // printf("value: %d; Hash value: %d \n", val, hash_val);
     Node_t *node = make_node(val, hash_val);
     Node_t *current_node = obj->buckets[hash_val];
 
@@ -62,12 +57,10 @@ bool randomizedSetInsert(RandomizedSet *obj, int val) {
         obj->buckets[hash_val] = node;
     } else {
         while (true) {
-            // printf("Loop: %d\n", current_node->value);
             if (current_node->value == val) {
                 return false;
             } else if (!(current_node->next)) {
                 current_node->next = node; 
-                // printf("GOT it, should not see no Loop\n");
                 break;
             }
             current_node = current_node->next;
@@ -100,7 +93,7 @@ bool randomizedSetRemove(RandomizedSet *obj, int val) {
 
 Node_t *getRandomBuckets(RandomizedSet *random_map_t, int map_size){
     Node_t *result = random_map_t->buckets[0];
-    srand(time(NULL));
+
     for (int i=1; i < map_size; i++) {
         int rand_idx = rand() % (i + 1); 
         if (!rand_idx) {
@@ -113,7 +106,6 @@ Node_t *getRandomBuckets(RandomizedSet *random_map_t, int map_size){
 int getRandomVal(Node_t *header){
     Node_t *current_node = header;
     int result = current_node->value;
-    srand(time(NULL));
 
     for (int i=2; current_node != NULL; i++) {
         int rand_idx = rand() % i; 
@@ -135,24 +127,15 @@ int randomizedSetGetRandom(RandomizedSet *obj) {
     for (int i=0; i<TABLE_SIZE; i++) {
         bucket = obj->buckets[i];
         if (obj->buckets[i] != NULL) { 
-            // printf("Bucket No %d: ~NULL\n", i);
             buckets_table_size++;
             random_map_t->buckets = (Node_t **)realloc(random_map_t->buckets, buckets_table_size * sizeof(Node_t *));
             random_map_t->buckets[buckets_table_size - 1] = bucket;
         }
-        // else {
-        //     printf("Bucket No %d: NULL\n", i);
-        // }
+
     }
-    if (!buckets_table_size) {
-        return -1;
-    }
+    if (!buckets_table_size) {return -1;}
         
-    // for (int i=0; i < buckets_table_size; i++) {
-    //     printf("Filled bucket value: %d", random_map_t->buckets[i]->value);
-    // }
     Node_t *random_bucket = getRandomBuckets(random_map_t, buckets_table_size);
-    // printf("hash value: %d \n", random_bucket->hash);
     int random_val = getRandomVal(random_bucket);
 
     free(random_map_t->buckets);
@@ -179,22 +162,23 @@ void randomizedSetFree(RandomizedSet *obj) {
 
 int main() {
     // Driver code
-    // TODO: Bucket number is currently not random
     RandomizedSet* obj = randomizedSetCreate();
-    bool set1 = randomizedSetInsert(obj, 122);
-    bool set2 = randomizedSetInsert(obj, 117);
-    bool set3 = randomizedSetInsert(obj, 81);
-    randomizedSetInsert(obj, 50);
-    randomizedSetInsert(obj, 32);
-    randomizedSetInsert(obj, 56);
-    set2 = randomizedSetInsert(obj, 81); // can still insert 118 and 81
-    printf("Can insert 81: %d \n", set2);
+    bool set1 = randomizedSetInsert(obj, 1);
+    bool set2 = randomizedSetInsert(obj, 10);
+    bool set3 = randomizedSetInsert(obj, 20);
+    bool set4 = randomizedSetInsert(obj, 30);
 
-    bool res1 = randomizedSetRemove(obj, 81);
-    printf("Can remove 81: %d \n", res1);
-    set2 = randomizedSetInsert(obj, 81); // can still insert 118 and 81
-    printf("Can insert 81: %d \n", set2);
     int random_num = randomizedSetGetRandom(obj);
     printf("Random number: %d \n", random_num);
+
+    random_num = randomizedSetGetRandom(obj);
+    printf("Random number: %d \n", random_num);
+    
+    random_num = randomizedSetGetRandom(obj);
+    printf("Random number: %d \n", random_num);
+    
+    random_num = randomizedSetGetRandom(obj);
+    printf("Random number: %d \n", random_num);
+
     randomizedSetFree(obj);
 }
